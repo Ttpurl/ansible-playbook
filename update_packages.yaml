@@ -9,15 +9,3 @@
         apt:
           upgrade: yes
           update_cache: yes
-
-      - name: Send notify to Telegram
-        community.general.telegram:
-          token: 'TOKEN'
-          api_args:
-            chat_id: -4015975592
-            parse_mode: "markdown"
-            disable_web_page_preview: true
-            disable_notification: true
-            text: "UPDATED PACKAGES ON: {{ inventory_hostname }}"
-            disable_web_page_preview: true
-            disable_notification: true
