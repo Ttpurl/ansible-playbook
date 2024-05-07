@@ -27,13 +27,3 @@
       stat:
         path: /bin/ping
       register: inetutils_ping_installed
-
-    - name: Display installed packages
-      debug:
-        msg: "Package {{ item.package }} is installed: {{ item.stat.exists }}"
-      loop:
-        - { package: "fail2ban", stat: "{{ fail2ban_installed.stat.exists | default(false) }}" }
-        - { package: "nano", stat: "{{ nano_installed.stat.exists | default(false) }}" }
-        - { package: "ufw", stat: "{{ ufw_installed.stat.exists | default(false) }}" }
-        - { package: "net-tools", stat: "{{ net_tools_installed.stat.exists | default(false) }}" }
-        - { package: "inetutils-ping", stat: "{{ inetutils_ping_installed.stat.exists | default(false) }}" }
