@@ -11,6 +11,11 @@
       apt:
         upgrade: yes
 
+    - name: Run apt autoremove
+      apt:
+        autoremove: yes
+        autoclean: yes
+
     - name: Fetch list of autoremovable packages
       shell: apt-get -s autoremove | awk '/^Remv/ { print $2 }'
       register: autoremove_list
