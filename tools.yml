@@ -1,0 +1,39 @@
+---
+- name: Check for required packages
+  hosts: all
+  become: true
+  tasks:
+    - name: Check if fail2ban is installed
+      stat:
+        path: /usr/bin/fail2ban-client
+      register: fail2ban_installed
+
+    - name: Check if nano is installed
+      stat:
+        path: /usr/bin/nano
+      register: nano_installed
+
+    - name: Check if ufw is installed
+      stat:
+        path: /usr/sbin/ufw
+      register: ufw_installed
+
+    - name: Check if net-tools is installed
+      stat:
+        path: /bin/netstat
+      register: net_tools_installed
+
+    - name: Check if inetutils-ping is installed
+      stat:
+        path: /bin/ping
+      register: inetutils_ping_installed
+
+    - name: Display installed packages
+      debug:
+        msg: "Package {{ item.package }} is installed: {{ item.stat.exists }}"
+      loop:
+        - { package: "fail2ban", stat: "{{ fail2ban_installed }}" }
+        - { package: "nano", stat: "{{ nano_installed }}" }
+        - { package: "ufw", stat: "{{ ufw_installed }}" }
+        - { package: "net-tools", stat: "{{ net_tools_installed }}" }
+        - { package: "inetutils-ping", stat: "{{ inetutils_ping_installed }}" }
