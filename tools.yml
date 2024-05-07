@@ -1,5 +1,5 @@
 ---
-- name: Check for required packages
+- name: Ensure required packages are installed
   hosts: all
   become: true
   tasks:
@@ -8,22 +8,52 @@
         path: /usr/bin/fail2ban-client
       register: fail2ban_installed
 
+    - name: Install fail2ban if not installed
+      package:
+        name: fail2ban
+        state: present
+      when: not fail2ban_installed.stat.exists
+
     - name: Check if nano is installed
       stat:
         path: /usr/bin/nano
       register: nano_installed
+
+    - name: Install nano if not installed
+      package:
+        name: nano
+        state: present
+      when: not nano_installed.stat.exists
 
     - name: Check if ufw is installed
       stat:
         path: /usr/sbin/ufw
       register: ufw_installed
 
+    - name: Install ufw if not installed
+      package:
+        name: ufw
+        state: present
+      when: not ufw_installed.stat.exists
+
     - name: Check if net-tools is installed
       stat:
         path: /bin/netstat
       register: net_tools_installed
 
+    - name: Install net-tools if not installed
+      package:
+        name: net-tools
+        state: present
+      when: not net_tools_installed.stat.exists
+
     - name: Check if inetutils-ping is installed
       stat:
         path: /bin/ping
       register: inetutils_ping_installed
+
+    - name: Install inetutils-ping if not installed
+      package:
+        name: inetutils-ping
+        state: present
+      when: not inetutils_ping_installed.stat.exists
