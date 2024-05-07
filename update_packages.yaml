@@ -1,11 +1,41 @@
----
 - hosts: all
   environment:
     LC_ALL: "en_US.UTF-8"
   become: yes
   tasks:
-      - name: upgrade apt packages
-        become: true
-        apt:
-          upgrade: yes
-          update_cache: yes
+    - name: Get list of packages to be upgraded
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 3600
+      register: apt_upgrade_result_before
+
+    - name: Display packages to be upgraded
+      debug:
+        msg: "Packages to be upgraded: {{ apt_upgrade_result_before.upgradable }}"
+
+    - name: Perform apt upgrade
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 3600
+      register: apt_upgrade_result_after
+
+    - name: Display upgraded packages
+      debug:
+        msg: "Upgraded packages: {{ apt_upgrade_result_after.upgraded }}"
+
+    - name: Run apt autoremove
+      become: yes
+      apt:
+        autoremove: yes
+        autoclean: yes
+
+    - name: Fetch list of autoremovable packages
+      shell: apt-get -s autoremove | awk '/^Remv/ { print $2 }'
+      register: autoremove_list
+
+    - name: Display autoremovable packages
+      debug:
+        msg: "Autoremovable packages: {{ autoremove_list.stdout_lines }}"
