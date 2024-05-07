@@ -21,7 +21,7 @@
         msg: "GPU: {{ gpu_check.stdout | default('N/A') }}"
 
     - name: Run nvidia-smi if GPU is available
-      command: nvidia-smi -l
+      command: nvidia-smi
       when: gpu_check.stdout is defined
 
     - name: Gather Disk information
