@@ -12,18 +12,7 @@
       apt:
         name: docker.io
         state: present
-      when: docker_installed|failed
-
-    - name: Check if Docker.io is installed
-      command: docker.io --version
-      register: docker_io_installed
-      ignore_errors: true
-
-    - name: Install Docker.io
-      apt:
-        name: docker.io
-        state: present
-      when: docker_io_installed|failed
+      when: docker_installed.rc != 0
 
     - name: Check if Docker Compose is installed
       command: docker-compose --version
@@ -34,4 +23,4 @@
       apt:
         name: docker-compose
         state: present
-      when: docker_compose_installed|failed
+      when: docker_compose_installed.rc != 0
