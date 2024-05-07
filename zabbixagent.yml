@@ -1,0 +1,9 @@
+---
+- name: Restart Zabbix Agent Service
+  hosts: your_target_host
+  become: yes
+  tasks:
+    - name: Restart Zabbix Agent service
+      service:
+        name: zabbix-agent
+        state: restarted
