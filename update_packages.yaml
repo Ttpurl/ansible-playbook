@@ -4,27 +4,22 @@
   become: yes
   tasks:
     - name: Get list of packages to be upgraded
-      become: yes
       apt:
         upgrade: yes
         update_cache: yes
         cache_valid_time: 3600
-      register: apt_upgrade_result_before
+        list: yes
+      register: apt_upgrade_result
 
     - name: Display packages to be upgraded
       debug:
-        msg: "Packages to be upgraded: {{ apt_upgrade_result_before.upgradable }}"
+        msg: "Packages to be upgraded: {{ apt_upgrade_result.package_list }}"
 
     - name: Perform apt upgrade
       apt:
         upgrade: yes
         update_cache: yes
         cache_valid_time: 3600
-      register: apt_upgrade_result_after
-
-    - name: Display upgraded packages
-      debug:
-        msg: "Upgraded packages: {{ apt_upgrade_result_after.upgraded }}"
 
     - name: Run apt autoremove
       become: yes
