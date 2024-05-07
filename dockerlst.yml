@@ -1,0 +1,15 @@
+---
+- name: Check Docker containers
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Run docker ps command
+      become: yes
+      shell: docker ps
+      register: docker_ps_output
+      ignore_errors: yes
+
+    - name: Display docker ps output
+      debug:
+        msg: "{{ docker_ps_output.stdout }}"
+      when: docker_ps_output is succeeded
