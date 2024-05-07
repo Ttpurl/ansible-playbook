@@ -3,26 +3,24 @@
     LC_ALL: "en_US.UTF-8"
   become: yes
   tasks:
-    - name: Get list of packages to be upgraded
+    - name: Perform apt update
       apt:
-        upgrade: yes
         update_cache: yes
-        cache_valid_time: 3600
-        list: yes
+
+    - name: Get list of packages to be upgraded
+      command: apt list --upgradable
       register: apt_upgrade_result
+      changed_when: false
 
     - name: Display packages to be upgraded
       debug:
-        msg: "Packages to be upgraded: {{ apt_upgrade_result.package_list }}"
+        msg: "Packages to be upgraded: {{ apt_upgrade_result.stdout_lines }}"
 
     - name: Perform apt upgrade
       apt:
         upgrade: yes
-        update_cache: yes
-        cache_valid_time: 3600
 
     - name: Run apt autoremove
-      become: yes
       apt:
         autoremove: yes
         autoclean: yes
