@@ -1,6 +1,6 @@
 ---
 - name: Restart Zabbix Agent Service
-  hosts: your_target_host
+  hosts: all
   become: yes
   tasks:
     - name: Restart Zabbix Agent service
