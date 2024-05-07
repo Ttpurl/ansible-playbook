@@ -7,15 +7,6 @@
       apt:
         update_cache: yes
 
-    - name: Get list of packages to be upgraded
-      command: apt list --upgradable
-      register: apt_upgrade_result
-      changed_when: false
-
-    - name: Display packages to be upgraded
-      debug:
-        msg: "Packages to be upgraded: {{ apt_upgrade_result.stdout_lines }}"
-
     - name: Perform apt upgrade
       apt:
         upgrade: yes
@@ -32,3 +23,9 @@
     - name: Display autoremovable packages
       debug:
         msg: "Autoremovable packages: {{ autoremove_list.stdout_lines }}"
+
+    - name: Remove autoremovable packages
+      apt:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ autoremove_list.stdout_lines }}"
