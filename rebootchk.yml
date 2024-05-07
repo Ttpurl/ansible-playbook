@@ -1,0 +1,13 @@
+---
+- name: Check if server needs to be restarted and reboot if necessary
+  hosts: your_server_group
+  gather_facts: true
+  tasks:
+    - name: Check if reboot is required
+      command: needs-restarting -r || true
+      register: reboot_check
+      changed_when: false
+
+    - name: Reboot server if required
+      reboot:
+      when: reboot_check.stdout.find('Reboot is required') != -1
