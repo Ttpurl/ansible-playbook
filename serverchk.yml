@@ -1,0 +1,29 @@
+---
+- name: Check System Resources
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Gather CPU information
+      debug:
+        msg: "CPU: {{ ansible_processor_cores }} core(s) at {{ ansible_processor_vcpus }} thread(s)"
+
+    - name: Gather RAM information
+      debug:
+        msg: "RAM: {{ ansible_memtotal_mb }} MB"
+
+    - name: Check for GPU
+      shell: lspci | grep -i nvidia
+      register: gpu_check
+      ignore_errors: yes
+
+    - name: Display GPU info if available
+      debug:
+        msg: "GPU: {{ gpu_check.stdout | default('N/A') }}"
+
+    - name: Gather Disk information
+      command: df -h
+      register: disk_usage
+
+    - name: Display Disk Utilization
+      debug:
+        msg: "{{ disk_usage.stdout_lines }}"
