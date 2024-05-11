@@ -1,0 +1,12 @@
+---
+- name: Check Firewall Rules
+  hosts: all
+  tasks:
+    - name: Checking...
+      ufw_status:
+        num=5
+      register: ufw_status
+
+    - name: UFW List Numbered
+      debug:
+        var: ufw_status.stdout_lines
